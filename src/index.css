@@ -1,0 +1,9 @@
+/* Place every design here */
+body {
+	background-color: #333333;
+	color: white;
+}
+
+#reader {
+	height: 500px;
+}

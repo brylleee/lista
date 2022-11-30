@@ -29,6 +29,10 @@ const App = () => {
                 // Parse QR Code content and update our states
                 let parsed = parseResult(text);
 
+                setName("");
+                setGuild("");
+                setSection("");
+
                 setName(parsed.name);
                 setGuild(parsed.guild);
                 setSection(parsed.section);
@@ -41,15 +45,17 @@ const App = () => {
             // This block will execute if the app has trouble starting the camera
             console.log(err);
         });
-    });
+    }, []);
 
     // Render all visible parts of our app, place all (HTML) contents here
     return (
         <div>
+            {/* The topbar. We can add menu buttons and/or settings button here */}
             <div id="topbar">
                 Lista
             </div>
 
+            {/* The camera. We don't need to touch this */}
             <div id="reader"></div>
 
             {/* Display QR Code content. This is a temporary proof of concept

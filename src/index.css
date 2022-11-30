@@ -2,8 +2,27 @@
 body {
 	background-color: #333333;
 	color: white;
+	margin: 0;
+	padding: 0;
+
+	font-family: njal;
 }
 
 #reader {
-	height: 500px;
+	margin-bottom: 20px;
+}
+
+#topbar {
+	height: 40px;
+	width: 100%;
+	margin-bottom: 50px;
+	padding: 15px 5px 5px 5px;
+	background-color: orange;
+	font-size: xx-large;
+}
+
+/* Custom font */
+@font-face {
+	font-family: njal;
+	src: url(assets/njal.otf);
 }

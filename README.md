@@ -81,6 +81,8 @@ This contains the javascript files that we will use for the main logic of the ap
 - Always ask for permission before deleting or modifying any code written by others.
 - Please feel free to add useful tips here in **README**.
 
+Make sure to run `git pull` first on your project so we work on the same versions.
+
 ## ✔️ Development To-Do
 Please add more here so we don't lose track of our progress.
  - [ ] **Adjust size** of QR Code Camera and it's **position**.

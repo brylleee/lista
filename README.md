@@ -26,7 +26,9 @@ This **README** is meant for the developers.
  - **HTML5QRCODE**
 	This is a free library we will be using in order to detect QR Code. Same as React, just type in `npm install html5-qrcode`
 
-***Note:** that you no longer need to install **Cordova**, you can run your code by typing* `npm run start` *(after saving your changes to your code, it automatically recompiles it so you do not need to re-run it)*. ***Cordova** installation is difficult, please just contact me if you want your code to be built into an **.apk***
+***Note:** that you no longer need to install **Cordova**, you can run your code by typing* `npm run start` *(after saving your changes to your code, it automatically recompiles it so you do not need to re-run it)*. ***Cordova** installation is difficult, but if you still wish to install it, you can through [here](https://cordova.apache.org/docs/en/11.x/guide/cli/), you should then install the required softwares for **Cordova** android development through [here](https://cordova.apache.org/docs/en/11.x/guide/platforms/android/index.html).*
+
+If you opted to install **Cordova** and it's required software, you can build the apk by running `npx yarn run build` and running `cordova build android` (*You might need to plug your phone to your computer and enable USB Debugging through your phone's Developer Settings. If **yarn** is not recognized, you might need to run `npm install yarn` before building the apk*)
 
 When you run your app in your laptop or PC, you may need to grant it permissions for camera and/or microphone.
 
@@ -56,6 +58,7 @@ You **do not need** to make changes to the following folders and files:
 ###  ✍️ Feel free to edit the following folders and files:
 ### 📁 public/
 This contains the html files as well as photos, videos, sounds that we will use in the app.
+
 📜 favicon.ico  - *is the icon of our app when shown in browser*
 
 📜 index.html  - *Visible part of the app. We usually do not need to make any changes here.*

@@ -22,6 +22,7 @@ const App = () => {
     }
 
     let updateAttendance = (name, guild, section, timeIn) => {
+      
       fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}:batchUpdate`, {
         method: "POST",
         headers: {
@@ -38,37 +39,46 @@ const App = () => {
                   {
                     "values": [
                       {
+                        // NAME
                         "userEnteredValue": {
                           "stringValue": name
                         }
                       },
                       {
+                        // GUILD
                         "userEnteredValue": {
                           "stringValue": guild
                         }
                       }, 
                       
                       {
+                        // SECTION
                         "userEnteredValue": {
                           "stringValue": section
                         }
                       },
                       {
+                        // TIME IN
                         "userEnteredValue": {
                           "stringValue": timeIn
                         }
-                      }
-                    ]
-                  }
-                ],
+                      },
+                    ]}],
                 "fields": "*"
-              }
+              },
             }
           ]
         })
       })
     }
 
+    // 
+    let removeDuplicate = () => {
+      fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}:batchUpdate`, {
+        method: "POST",headers: {"Content-Type": "application/json", Authorization: `Bearer ${accessToken}`,},body: JSON.stringify({"requests": [{"deleteDuplicates": {"range": {"sheetId": 0 },"comparisonColumns": [ {"dimension": "COLUMNS","startIndex": 0,"endIndex": 1}]}}] })
+      });
+    }
+    
     // Variable to compare the last result to the recent QR code 
     let lastResult = "";
 
@@ -126,6 +136,8 @@ const App = () => {
                 <p id="guild">{ guild }</p>
                 <p id="section">{ section }</p>
             </div>
+             {/* Temporary button for removing duplicates in spreadsheet*/}
+            <button onClick={removeDuplicate}>Remove Duplicate</button>
         </div>
     )
 };

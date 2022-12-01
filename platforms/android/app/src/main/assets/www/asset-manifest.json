@@ -1,13 +1,13 @@
 {
   "main.css": "./static/css/main.c8d75554.chunk.css",
-  "main.js": "./static/js/main.3883b4ab.chunk.js",
-  "main.js.map": "./static/js/main.3883b4ab.chunk.js.map",
+  "main.js": "./static/js/main.b13bc480.chunk.js",
+  "main.js.map": "./static/js/main.b13bc480.chunk.js.map",
   "runtime~main.js": "./static/js/runtime~main.d653cc00.js",
   "runtime~main.js.map": "./static/js/runtime~main.d653cc00.js.map",
   "static/js/2.8e558268.chunk.js": "./static/js/2.8e558268.chunk.js",
   "static/js/2.8e558268.chunk.js.map": "./static/js/2.8e558268.chunk.js.map",
   "index.html": "./index.html",
-  "precache-manifest.fc06da8fe3e5951de32a705028d07e69.js": "./precache-manifest.fc06da8fe3e5951de32a705028d07e69.js",
+  "precache-manifest.8c5262ff524ba0240c8ae80a2c7d9e2d.js": "./precache-manifest.8c5262ff524ba0240c8ae80a2c7d9e2d.js",
   "service-worker.js": "./service-worker.js",
   "static/css/main.c8d75554.chunk.css.map": "./static/css/main.c8d75554.chunk.css.map",
   "static/media/index.css": "./static/media/njal.25d89823.otf"

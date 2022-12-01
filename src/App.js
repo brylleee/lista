@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Html5Qrcode } from "html5-qrcode";
 
+const spreadsheetID = "1BEdgdwItam2jOA9MGEhtexD3MqK21Y0mMxxBebvooO4"; 
+const accessToken = ""; //TOKEN
 // Our main component
 const App = () => {
     // Name, guild, and section states that updates everytime QR Code is scanned
@@ -18,13 +20,55 @@ const App = () => {
         }
     }
 
+    let updateSheetValues = (name, guild, section) => {
+      
+      fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}:batchUpdate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          //update this token with yours. 
+          Authorization: `Bearer ${accessToken}`,
+        },
+        
+        body: JSON.stringify({
+          "requests": [
+            {
+              "appendCells": {
+                "rows": [
+                  {
+                    "values": [
+                      {
+                        "userEnteredValue": {
+                          "stringValue": name
+                        }
+                      },
+                      {
+                        "userEnteredValue": {
+                          "stringValue": guild
+                        }
+                      },
+                      {
+                        "userEnteredValue": {
+                          "stringValue": section
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "fields": "*"
+              }
+            }
+          ]
+        })
+      })
+    }
     // useEffect() means if this component is rendered (shown to the user)
     useEffect(() => {
         const html5QrCode = new Html5Qrcode("reader");  // Use the div with id 'reader' as our QR Code Reader
         const config = { fps: 10, qrbox: 250 };  //  QR Code Reader configurations
 
         // Start reader using back camera
-        html5QrCode.start({ facingMode: "environment" }, config,
+        html5QrCode.start({ facingMode: "user" }, config,
             (text, result) => {
                 // Parse QR Code content and update our states
                 let parsed = parseResult(text);
@@ -36,6 +80,9 @@ const App = () => {
                 setName(parsed.name);
                 setGuild(parsed.guild);
                 setSection(parsed.section);
+
+                //Update Google Sheets
+                updateSheetValues(parsed.name, parsed.guild, parsed.section);
             },
             (errorMessage) => {
                 // If scan has error, this block will execute
@@ -68,5 +115,4 @@ const App = () => {
         </div>
     )
 };
-
 export default App;

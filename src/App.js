@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Html5Qrcode } from "html5-qrcode";
 
-const spreadsheetID = "1BEdgdwItam2jOA9MGEhtexD3MqK21Y0mMxxBebvooO4"; 
+const spreadsheetID = "1BEdgdwItam2jOA9MGEhtexD3MqK21Y0mMxxBebvooO4";
 // The access token changes every few minutes
 const accessToken = "TOKEN";
+
 // Our main component
 const App = () => {
     // Name, guild, and section states that updates everytime QR Code is scanned
     let [name, setName] = useState("");
     let [guild, setGuild] = useState("");
     let [section, setSection] = useState("");
-    
+
     // Separate name, guild, and section and return it as different variables
     let parseResult = (qrcodeContent) => {
         let splitted = qrcodeContent.split(" [|] ");  // QR Code content example: Dela Cruz, Juan A. [|] IREDOC [|] STEM1201
@@ -22,80 +23,65 @@ const App = () => {
     }
 
     let updateAttendance = (name, guild, section, timeIn) => {
-      
-      fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}:batchUpdate`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          //update this token with yours. 
-          Authorization: `Bearer ${accessToken}`,
-        },
-        
-        body: JSON.stringify({
-          "requests": [
-            {
-              "appendCells": {
-                "rows": [
-                  {
-                    "values": [
-                      {
-                        // NAME
-                        "userEnteredValue": {
-                          "stringValue": name
-                        }
-                      },
-                      {
-                        // GUILD
-                        "userEnteredValue": {
-                          "stringValue": guild
-                        }
-                      }, 
-                      
-                      {
-                        // SECTION
-                        "userEnteredValue": {
-                          "stringValue": section
-                        }
-                      },
-                      {
-                        // TIME IN
-                        "userEnteredValue": {
-                          "stringValue": timeIn
-                        }
-                      },
-                    ]}],
-                "fields": "*"
-              },
-            }
-          ]
+        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}:batchUpdate`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                //update this token with yours.
+                Authorization: `Bearer ${accessToken}`,
+            },
+
+            body: JSON.stringify({
+                "requests": [{
+                    "appendCells": {
+                        "rows": [{
+                            "values": [
+                                {
+                                    // NAME
+                                    "userEnteredValue": {
+                                        "stringValue": name
+                                    }
+                                },
+                                {
+                                    // GUILD
+                                    "userEnteredValue": {
+                                        "stringValue": guild
+                                    }
+                                },
+                                {
+                                    // SECTION
+                                    "userEnteredValue": {
+                                        "stringValue": section
+                                    }
+                                },
+                                {
+                                    // TIME IN
+                                    "userEnteredValue": {
+                                        "stringValue": timeIn
+                                    }
+                                },
+                            ]
+                        }],
+                        "fields": "*"
+                    },
+                }]
+            })
         })
-      })
     }
 
-    // 
-    let removeDuplicate = () => {
-      fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}:batchUpdate`, {
-        method: "POST",headers: {"Content-Type": "application/json", Authorization: `Bearer ${accessToken}`,},body: JSON.stringify({"requests": [{"deleteDuplicates": {"range": {"sheetId": 0 },"comparisonColumns": [ {"dimension": "COLUMNS","startIndex": 0,"endIndex": 1}]}}] })
-      });
-    }
-    
-    // Variable to compare the last result to the recent QR code 
+    // Variable to compare the last result to the recent QR code
     let lastResult = "";
 
     // useEffect() means if this component is rendered (shown to the user)
     useEffect(() => {
         const html5QrCode = new Html5Qrcode("reader");  // Use the div with id 'reader' as our QR Code Reader
         const config = { fps: 10, qrbox: 250};  //  QR Code Reader configurations
-        
+
         // Start reader using back camera
-        html5QrCode.start({ facingMode: "user" }, config,
+        html5QrCode.start({ facingMode: "environment" }, config,
         (text, result) => {
-              // Parse QR Code content and update our states
+            // Parse QR Code content and update our states
             let parsed = parseResult(text);
-            
-            setName("");
-            setGuild("");
-            setSection("");
 
             setName(parsed.name);
             setGuild(parsed.guild);
@@ -103,19 +89,18 @@ const App = () => {
 
             //This conditions stops the application from updating the spreadsheet when showing the same QR code
             if (text !== lastResult) {
-              lastResult = text;
-              let timeIn = new Date().toLocaleTimeString();
-              updateAttendance(parsed.name, parsed.guild, parsed.section, timeIn);
+            lastResult = text;
+            let timeIn = new Date().toLocaleTimeString();
+                updateAttendance(parsed.name, parsed.guild, parsed.section, timeIn);
             }
-          },
-          (errorMessage) => {
-              // If scan has error, this block will execute
-              console.log(errorMessage);
-          }
-      ).catch((err) => {
-          // This block will execute if the app has trouble starting the camera
-          console.log(err);
-      });
+        },
+        (errorMessage) => {
+            // If scan has error, this block will execute
+            console.log(errorMessage);
+        }).catch((err) => {
+            // This block will execute if the app has trouble starting the camera
+            console.log(err);
+        });
     }, []);
 
     // Render all visible parts of our app, place all (HTML) contents here
@@ -136,9 +121,8 @@ const App = () => {
                 <p id="guild">{ guild }</p>
                 <p id="section">{ section }</p>
             </div>
-             {/* Temporary button for removing duplicates in spreadsheet*/}
-            <button onClick={removeDuplicate}>Remove Duplicate</button>
         </div>
     )
 };
+
 export default App;

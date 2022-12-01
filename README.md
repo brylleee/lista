@@ -85,8 +85,11 @@ Make sure to run `git pull` first on your project so we work on the same version
 
 ## ✔️ Development To-Do
 Please add more here so we don't lose track of our progress.
- - [ ] **Adjust size** of QR Code Camera and it's **position**.
+ - [x] **Adjust size** of QR Code Camera and it's **position**.
  - [ ] Choose **color theme** for the app
  - [ ] Make app logo and replace public/favicon.ico
- - [ ] Once QR Code scan is successful, app should write the student's name, guild in the respective section they belong in google sheets. Refer to [this tutorial](https://levelup.gitconnected.com/google-sheets-api-tutorial-with-javascript-588f581aa1d9). For the meantime, we can ****just display** the name, guild, and section**.
+ - [x] Once QR Code scan is successful, app should write the student's name, guild in the respective section they belong in google sheets. Refer to [this tutorial](https://levelup.gitconnected.com/google-sheets-api-tutorial-with-javascript-588f581aa1d9). For the meantime, we can ****just display** the name, guild, and section**.
  - [ ] Display a **creative error message** if camera error or parse error
+ - [ ] Switch to different camera if camera is clicked
+ - [ ] Allow app users to modify which google spreadsheet link to update
+ - [ ] Once QR Code is scanned, search by guild or section, then search by name, then update red attendance to green to mark as present

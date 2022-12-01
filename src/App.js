@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Html5Qrcode } from "html5-qrcode";
 
 const spreadsheetID = "1BEdgdwItam2jOA9MGEhtexD3MqK21Y0mMxxBebvooO4"; 
-const accessToken = ""; //TOKEN
+// The access token changes every few minutes
+const accessToken = "TOKEN";
 // Our main component
 const App = () => {
     // Name, guild, and section states that updates everytime QR Code is scanned
     let [name, setName] = useState("");
     let [guild, setGuild] = useState("");
     let [section, setSection] = useState("");
-
+    
     // Separate name, guild, and section and return it as different variables
     let parseResult = (qrcodeContent) => {
         let splitted = qrcodeContent.split(" [|] ");  // QR Code content example: Dela Cruz, Juan A. [|] IREDOC [|] STEM1201
@@ -20,8 +21,7 @@ const App = () => {
         }
     }
 
-    let updateSheetValues = (name, guild, section) => {
-      
+    let updateAttendance = (name, guild, section, timeIn) => {
       fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}:batchUpdate`, {
         method: "POST",
         headers: {
@@ -46,10 +46,16 @@ const App = () => {
                         "userEnteredValue": {
                           "stringValue": guild
                         }
-                      },
+                      }, 
+                      
                       {
                         "userEnteredValue": {
                           "stringValue": section
+                        }
+                      },
+                      {
+                        "userEnteredValue": {
+                          "stringValue": timeIn
                         }
                       }
                     ]
@@ -62,36 +68,44 @@ const App = () => {
         })
       })
     }
+
+    // Variable to compare the last result to the recent QR code 
+    let lastResult = "";
+
     // useEffect() means if this component is rendered (shown to the user)
     useEffect(() => {
         const html5QrCode = new Html5Qrcode("reader");  // Use the div with id 'reader' as our QR Code Reader
-        const config = { fps: 10, qrbox: 250 };  //  QR Code Reader configurations
-
+        const config = { fps: 10, qrbox: 250};  //  QR Code Reader configurations
+        
         // Start reader using back camera
-        html5QrCode.start({ facingMode: "environment" }, config,
-            (text, result) => {
-                // Parse QR Code content and update our states
-                let parsed = parseResult(text);
+        html5QrCode.start({ facingMode: "user" }, config,
+        (text, result) => {
+              // Parse QR Code content and update our states
+            let parsed = parseResult(text);
+            
+            setName("");
+            setGuild("");
+            setSection("");
 
-                setName("");
-                setGuild("");
-                setSection("");
+            setName(parsed.name);
+            setGuild(parsed.guild);
+            setSection(parsed.section);
 
-                setName(parsed.name);
-                setGuild(parsed.guild);
-                setSection(parsed.section);
-
-                //Update Google Sheets
-                updateSheetValues(parsed.name, parsed.guild, parsed.section);
-            },
-            (errorMessage) => {
-                // If scan has error, this block will execute
-                console.log(errorMessage);
+            //This conditions stops the application from updating the spreadsheet when showing the same QR code
+            if (text !== lastResult) {
+              lastResult = text;
+              let timeIn = new Date().toLocaleTimeString();
+              updateAttendance(parsed.name, parsed.guild, parsed.section, timeIn);
             }
-        ).catch((err) => {
-            // This block will execute if the app has trouble starting the camera
-            console.log(err);
-        });
+          },
+          (errorMessage) => {
+              // If scan has error, this block will execute
+              console.log(errorMessage);
+          }
+      ).catch((err) => {
+          // This block will execute if the app has trouble starting the camera
+          console.log(err);
+      });
     }, []);
 
     // Render all visible parts of our app, place all (HTML) contents here

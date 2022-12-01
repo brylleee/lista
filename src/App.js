@@ -75,7 +75,7 @@ const App = () => {
     // useEffect() means if this component is rendered (shown to the user)
     useEffect(() => {
         const html5QrCode = new Html5Qrcode("reader");  // Use the div with id 'reader' as our QR Code Reader
-        const config = { fps: 10, qrbox: 250};  //  QR Code Reader configurations
+        const config = { fps: 10, qrbox: 150};  //  QR Code Reader configurations
 
         // Start reader using back camera
         html5QrCode.start({ facingMode: "environment" }, config,
@@ -114,12 +114,18 @@ const App = () => {
             {/* The camera. We don't need to touch this */}
             <div id="reader"></div>
 
+            <br /><br /><hr />
+
             {/* Display QR Code content. This is a temporary proof of concept
                 QR Code content should be synced to google sheets */}
             <div align="center">
-                <p id="name">{ name }</p>
-                <p id="guild">{ guild }</p>
-                <p id="section">{ section }</p>
+                <h2>Student Information</h2>
+
+                <div id="student-information">
+                    <p id="name">Name: { name }</p>
+                    <p id="guild">Guild: { guild }</p>
+                    <p id="section">Section: { section }</p>
+                </div>
             </div>
         </div>
     )

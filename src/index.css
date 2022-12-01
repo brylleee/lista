@@ -1,28 +1,44 @@
 /* Place every design here */
 body {
-	background-color: #333333;
-	color: white;
+	background-color: white;
+	color: #333333;
 	margin: 0;
 	padding: 0;
 
-	font-family: njal;
+	font-family: kollektif;
 }
 
 #reader {
-	margin-bottom: 20px;
+	width: 70%;
+	margin: auto;
+	clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
 }
 
 #topbar {
-	height: 40px;
+	height: 50px;
 	width: 100%;
 	margin-bottom: 50px;
 	padding: 15px 5px 5px 5px;
-	background-color: orange;
+	background-color: #0773bb;
 	font-size: xx-large;
 }
 
-/* Custom font */
+#student-information {
+	margin: 0 20px 0 20px;
+	text-align: left;
+}
+
+#student-information p {
+	font-style: bold;
+}
+
+/* Custom fonts */
 @font-face {
-	font-family: njal;
-	src: url(assets/njal.otf);
+	font-family: barlowlight;
+	src: url(assets/Barlow-Light.ttf);
+}
+
+@font-face {
+	font-family: kollektif;
+	src: url(assets/Kollektif.ttf);
 }

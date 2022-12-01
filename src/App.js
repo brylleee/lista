@@ -68,7 +68,7 @@ const App = () => {
         const config = { fps: 10, qrbox: 250 };  //  QR Code Reader configurations
 
         // Start reader using back camera
-        html5QrCode.start({ facingMode: "user" }, config,
+        html5QrCode.start({ facingMode: "environment" }, config,
             (text, result) => {
                 // Parse QR Code content and update our states
                 let parsed = parseResult(text);

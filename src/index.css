@@ -5,6 +5,11 @@ body {
 	margin: 0;
 	padding: 0;
 
+	/* Make text unselectable */
+	user-select: none;
+	-webkit-user-drag: none;
+	-webkit-user-select: none;
+
 	font-family: kollektif;
 }
 

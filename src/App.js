@@ -79,7 +79,7 @@ const App = () => {
     // useEffect() means if this component is rendered (shown to the user)
     useEffect(() => {
         const html5QrCode = new Html5Qrcode("reader");  // Use the div with id 'reader' as our QR Code Reader
-        const config = { fps: 10, qrbox: 250};  //  QR Code Reader configurations
+        const config = { fps: 10, qrbox: 200};  //  QR Code Reader configurations
 
         // Start reader using back camera
         html5QrCode.start({ facingMode: "environment" }, config,
@@ -109,29 +109,50 @@ const App = () => {
 
     // Render all visible parts of our app, place all (HTML) contents here
     return (
-        <div>
-            {/* The topbar. We can add menu buttons and/or settings button here */}
-            <div id="topbar">
-                Lista
-            </div>
+        <Ons.Page>
 
-            {/* The camera. We don't need to touch this */}
-            <div id="reader"></div>
+            <Ons.Splitter>
+                <Ons.SplitterSide
+                    side="left"
+                    width={ "300" }
+                    isSwipeable={ true }
+                    collapse={ true }>
 
-            <br /><br /><hr />
+                    <Ons.Page> Page Left </Ons.Page>
+                </Ons.SplitterSide>
 
-            {/* Display QR Code content. This is a temporary proof of concept
-                QR Code content should be synced to google sheets */}
-            <div align="center">
-                <h2>Student Information</h2>
+                <Ons.SplitterContent>
+                    <Ons.Page renderToolbar={() =>
+                        <Ons.Toolbar id="toolbar">
+                            <div className="left">
+                                <div className="sidebyside">
+                                    <Ons.Icon icon="md-menu"></Ons.Icon>
+                                    <span id="toolbar-title">Lista</span>
+                                </div>
+                            </div>
+                        </Ons.Toolbar>}>
 
-                <div id="student-information">
-                    <p id="name">Name: { name }</p>
-                    <p id="guild">Guild: { guild }</p>
-                    <p id="section">Section: { section }</p>
-                </div>
-            </div>
-        </div>
+                        <br /><br />
+
+                        <div id="reader"></div>
+
+                        <br /><br /><hr />
+
+                        {/* Display QR Code content. This is a temporary proof of concept
+                            QR Code content should be synced to google sheets */}
+                        <div align="center">
+                            <h2>Student Information</h2>
+
+                            <div id="student-information">
+                                <p id="name">Name: { name }</p>
+                                <p id="guild">Guild: { guild }</p>
+                                <p id="section">Section: { section }</p>
+                            </div>
+                        </div>
+                    </Ons.Page>
+                </Ons.SplitterContent>
+            </Ons.Splitter>
+        </Ons.Page>
     )
 };
 

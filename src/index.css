@@ -9,18 +9,30 @@ body {
 }
 
 #reader {
-	width: 70%;
+	width: 90%;
 	margin: auto;
-	clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
 }
 
-#topbar {
-	height: 50px;
-	width: 100%;
-	margin-bottom: 50px;
-	padding: 15px 5px 5px 5px;
+#toolbar {
 	background-color: #0773bb;
-	font-size: xx-large;
+	height: 55px;
+	color: white;
+	padding: 5px;
+
+	font-family: kollektif;
+	font-size: x-large;
+}
+
+#toolbar #toolbar-title {
+	/* Aligns title with the burger icon to the left */
+	position: relative;
+	top: 2px;
+}
+
+.sidebyside {
+	display: flex;
+	justify-content: left;
+	column-gap: 8px;  /* Make sure items laid side by side do not overlap */
 }
 
 #student-information {

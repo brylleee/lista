@@ -13,6 +13,7 @@ const accessToken = "TOKEN";
 const App = () => {
     // Name, guild, and section states that updates everytime QR Code is scanned
     let [name, setName] = useState("");
+    let [studentNumber, setStudentNumber] = useState("");
     let [guild, setGuild] = useState("");
     let [section, setSection] = useState("");
 
@@ -21,8 +22,9 @@ const App = () => {
         let splitted = qrcodeContent.split(" [|] ");  // QR Code content example: Dela Cruz, Juan A. [|] IREDOC [|] STEM1201
         return {
             name: splitted[0],
-            guild: splitted[1],
-            section: splitted[2]
+            studentNumber: splitted[1],
+            guild: splitted[2],
+            section: splitted[3]
         }
     }
 
@@ -88,6 +90,7 @@ const App = () => {
             let parsed = parseResult(text);
 
             setName(parsed.name);
+            setStudentNumber(parsed.studentNumber);
             setGuild(parsed.guild);
             setSection(parsed.section);
 
@@ -145,6 +148,7 @@ const App = () => {
 
                             <div id="student-information">
                                 <p id="name">Name: { name }</p>
+                                <p id="student-number">Student number: { studentNumber }</p>
                                 <p id="guild">Guild: { guild }</p>
                                 <p id="section">Section: { section }</p>
                             </div>

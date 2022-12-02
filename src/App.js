@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Html5Qrcode } from "html5-qrcode";
 
+import * as Ons from 'react-onsenui';
+import 'onsenui/css/onsenui.css';
+import 'onsenui/css/onsen-css-components.css';
+
 const spreadsheetID = "1BEdgdwItam2jOA9MGEhtexD3MqK21Y0mMxxBebvooO4";
 // The access token changes every few minutes
 const accessToken = "TOKEN";

@@ -180,17 +180,19 @@ const App = () => {
 
                         <div id="reader"></div>
 
-                        <br /><br /><hr />
+                        <br /><br />
 
                         {/* Display QR Code content. This is a temporary proof of concept
                             QR Code content should be synced to google sheets */}
                         <div align="center" id="student-information">
-                            <h2 className="title" align="center">Student Information</h2>
+                            <Ons.Card>
+                                <h2 className="title" align="center">Student Information</h2>
 
-                            <p id="name">Name: {name}</p>
-                            <p id="student-number">Student number: {studentNumber}</p>
-                            <p id="guild">Guild: {guild}</p>
-                            <p id="section">Section: {section}</p>
+                                <p id="name">Name: {name}</p>
+                                <p id="student-number">Student number: {studentNumber}</p>
+                                <p id="guild">Guild: {guild}</p>
+                                <p id="section">Section: {section}</p>
+                            </Ons.Card>
                         </div>
                     </Ons.Page>
                 </Ons.SplitterContent>

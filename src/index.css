@@ -1,7 +1,6 @@
 /* Place every design here */
 body {
 	background-color: white;
-	color: #333333;
 	margin: 0;
 	padding: 0;
 
@@ -9,8 +8,6 @@ body {
 	user-select: none;
 	-webkit-user-drag: none;
 	-webkit-user-select: none;
-
-	font-family: kollektif;
 }
 
 #reader {
@@ -23,15 +20,8 @@ body {
 	height: 55px;
 	color: white;
 	padding: 5px;
-
 	font-family: kollektif;
 	font-size: x-large;
-}
-
-#toolbar #toolbar-title {
-	/* Aligns title with the burger icon to the left */
-	position: relative;
-	top: 2px;
 }
 
 .sidebyside {
@@ -52,10 +42,10 @@ body {
 /* Custom fonts */
 @font-face {
 	font-family: barlowlight;
-	src: url(assets/Barlow-Light.ttf);
+	src: url(./assets/Barlow-Light.ttf);
 }
 
 @font-face {
 	font-family: kollektif;
-	src: url(assets/Kollektif.ttf);
+	src: url(./assets/Kollektif.ttf);
 }

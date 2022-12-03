@@ -27,8 +27,8 @@ const App = () => {
             section: splitted[3],
         };
     };
-    // TESTING NI ISHA
 
+    // TESTING NI ISHA
     let updateAttendance = async (name) => {
         // Name Index: Position of the Student's name in the Google Sheet
         var nameIndex = 1;
@@ -94,6 +94,7 @@ const App = () => {
                 return;
             }
         }
+
         console.log("Couldn't Find Name");
         console.log(data);
         return data;
@@ -146,8 +147,8 @@ const App = () => {
                     side="left"
                     width={"300"}
                     isSwipeable={true}
-                    collapse={true}
-                >
+                    collapse={true}>
+
                     <Ons.Page> Page Left </Ons.Page>
                 </Ons.SplitterSide>
 

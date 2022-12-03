@@ -17,6 +17,8 @@ const App = () => {
     let [guild, setGuild] = useState("");
     let [section, setSection] = useState("");
 
+    let [sideMenuOpen, setSideMenuOpen] = useState(false);
+
     // Separate name, guild, and section and return it as different variables
     let parseResult = (qrcodeContent) => {
         let splitted = qrcodeContent.split(" [|] "); // QR Code content example: Dela Cruz, Juan A. [|] Student No. [|] IREDOC [|] STEM1201
@@ -139,31 +141,40 @@ const App = () => {
             });
     }, []);
 
+    let renderToolbar = () => {
+        return (
+            <Ons.Toolbar id="toolbar">
+                <div className="left">
+                    <div className="sidebyside">
+                        <Ons.ToolbarButton style={{ color: "white" }} onClick={ () => setSideMenuOpen(true) }>
+                            <Ons.Icon icon="md-menu"></Ons.Icon>
+                        </Ons.ToolbarButton>
+
+                        <span id="toolbar-title">Lista</span>
+                    </div>
+                </div>
+            </Ons.Toolbar>
+        );
+    }
+
     // Render all visible parts of our app, place all (HTML) contents here
     return (
         <Ons.Page>
             <Ons.Splitter>
                 <Ons.SplitterSide
                     side="left"
-                    width={"300"}
-                    isSwipeable={true}
-                    collapse={true}>
+                    width={ "300" }
+                    swipeable={ true }
+                    collapse={ true }
+                    isOpen={ sideMenuOpen }
+                    onPostClose={ () => setSideMenuOpen(false) }>
 
                     <Ons.Page> Page Left </Ons.Page>
                 </Ons.SplitterSide>
 
                 <Ons.SplitterContent>
                     <Ons.Page
-                        renderToolbar={() => (
-                            <Ons.Toolbar id="toolbar">
-                                <div className="left">
-                                    <div className="sidebyside">
-                                        <Ons.Icon icon="md-menu"></Ons.Icon>
-                                        <span id="toolbar-title">Lista</span>
-                                    </div>
-                                </div>
-                            </Ons.Toolbar>
-                        )}>
+                        renderToolbar={ renderToolbar }>
 
                         <br /><br />
 

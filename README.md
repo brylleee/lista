@@ -100,3 +100,4 @@ Please add more here so we don't lose track of our progress.
  - [ ] Add a better layout to student information section
  - [ ] Make sidemenu work
  - [ ] Editable input for google sheets id
+ - [ ] Generate a permanent access token 

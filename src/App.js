@@ -110,7 +110,7 @@ const App = () => {
         // Start reader using back camera
         html5QrCode
             .start(
-                { facingMode: "user" },
+                { facingMode: "environment" },
                 config,
                 (text, result) => {
                     // Parse QR Code content and update our states

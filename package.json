@@ -135,5 +135,8 @@
   },
   "devDependencies": {
     "cordova-android": "^10.1.2"
+  },
+  "cordova": {
+    "plugins": {}
   }
 }

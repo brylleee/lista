@@ -98,6 +98,8 @@ Please add more here so we don't lose track of our progress.
  - [ ] Allow app users to modify which google spreadsheet link to update
  - [ ] Once QR Code is scanned, search by guild or section, then search by name, then update red attendance to green to mark as present
  - [ ] Add a better layout to student information section
- - [ ] Make sidemenu work
+ - [x] Make sidemenu work
  - [ ] Editable input for google sheets id
- - [ ] Generate a permanent access token 
+ - [ ] Generate a permanent access token
+ - [ ] Add sidemenu content
+ - [ ] Creative error handling

@@ -46,45 +46,6 @@ const App = () => {
         "STEM1202": [180, 195],
       }
 
-    let updateDate = async () => { // Unnecessary ba HAHAA
-        fetch(
-            `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}:batchUpdate`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    //update this token with yours.
-                    Authorization: `Bearer ${accessToken}`,
-                },
-
-                body: JSON.stringify({
-                    "requests": [
-                      {
-                        "updateCells": { 
-                            "range": {
-                                "sheetId": sheetID,
-                                "startColumnIndex": meetingDatesStartIndex + dates.length ,
-                                "endColumnIndex": meetingDatesStartIndex + dates.length + 1,
-                                "endRowIndex": 2,
-                                "startRowIndex": 1 
-                            },
-                            "fields": "*",
-                            "rows": [
-                                {
-                                "values": [{
-                                    "userEnteredValue":{
-                                    "stringValue": dateToday.toLocaleDateString('en-us',{month:'short' , day:'numeric'}).split(" ").join(". ") }}
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                }),
-            }
-        );
-    }
-
     let updateAttendance = async (name, section) => {
         // Name Index: Position of the Student's name in the Google Sheet
         var nameIndex = 1;
@@ -108,7 +69,42 @@ const App = () => {
         }
         else {
             console.log("Cannot find Current Date in Google Sheets\nAdding a new Column!");
-            updateDate(); 
+            fetch(
+                `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}:batchUpdate`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        //update this token with yours.
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+    
+                    body: JSON.stringify({
+                        "requests": [
+                          {
+                            "updateCells": { 
+                                "range": {
+                                    "sheetId": sheetID,
+                                    "startColumnIndex": meetingDatesStartIndex + dates.length ,
+                                    "endColumnIndex": meetingDatesStartIndex + dates.length + 1,
+                                    "endRowIndex": 2,
+                                    "startRowIndex": 1 
+                                },
+                                "fields": "*",
+                                "rows": [
+                                    {
+                                    "values": [{
+                                        "userEnteredValue":{
+                                        "stringValue": dateToday.toLocaleDateString('en-us',{month:'short' , day:'numeric'}).split(" ").join(". ") }}
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }),
+                }
+            );
             nextMeetingDay = dates.length + 1;
         }
         

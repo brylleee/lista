@@ -6,7 +6,9 @@ import "onsenui/css/onsenui.css";
 import "onsenui/css/onsen-css-components.css";
 
 const spreadsheetID = "1BEdgdwItam2jOA9MGEhtexD3MqK21Y0mMxxBebvooO4";
-const accessToken = "ya29.a0AeTM1ifjH6ceJAY6a4QWkU5lM2_B3w8FsjPTZO2Thzkv3p2rKjMfQoNoAp4Peo003DAIAL4FHch2ZLXH26ATy8mwgTn2IEaZG5ee2h5t7H4chcivmoUyFmLtGQszwzChN18YVGxBcgU1BaK_k28DLl1iC4K-aCgYKAf0SARMSFQHWtWOmH-ZwkLkNMEr8IZYWWyxlgA0163";
+const sheetName = "ListaAttendance" // SHEET NAME; 
+const sheetID = 0 // SHEET ID
+const accessToken = "ya29.a0AeTM1icE-aqqd5b4IJuBugBhQaE-mYP8R5MWt_5pRc3k8pt1cXkMXUqpHYYczFVbTJsbgApkwkN-QmWf3KmAFNYgFFy8D8nHKLBN27eR9WrFn6A1Qp29JqV5qqY0SFDeWKzhvSfxjVcwVh7LPSzcVGsuq1yLaCgYKAV4SARISFQHWtWOmZNLI9LERKAUgA50rJsDJSQ0163";
 
 // Our main component
 const App = () => {
@@ -15,9 +17,7 @@ const App = () => {
     let [studentNumber, setStudentNumber] = useState("");
     let [guild, setGuild] = useState("");
     let [section, setSection] = useState("");
-
     let [sideMenuOpen, setSideMenuOpen] = useState(false);
-
     // Separate name, guild, and section and return it as different variables
     let parseResult = (qrcodeContent) => {
         let splitted = qrcodeContent.split(" [|] "); // QR Code content example: Dela Cruz, Juan A. [|] Student No. [|] IREDOC [|] STEM1201
@@ -28,16 +28,32 @@ const App = () => {
             section: splitted[3],
         };
     };
+    const sections = {
+        "ABM1101": [4, 7],
+        "CA1101": [9, 22],
+        "DA1101": [9, 22],
+        "HUMSS1101": [24, 29],
+        "TO1101": [24, 29],
+        "ITM1101": [31, 54],
+        "STEM1101": [56, 81],
+        "STEM1102": [83, 92],
+        "ABM1201": [95, 113],
+        "CA1201": [115, 121],
+        "DA1201": [115, 121],
+        "HUMSS1201": [123, 134],
+        "ITM1201": [136, 160],
+        "STEM1201": [162, 178],
+        "STEM1202": [180, 195],
+      }
 
-    // TESTING NI ISHA
-    let updateAttendance = async (name) => {
+    let updateAttendance = async (name, section) => {
         // Name Index: Position of the Student's name in the Google Sheet
         var nameIndex = 1;
         const meetingDatesStartIndex = 3;
         let nextMeetingDay;
 
-        const dates = await fetch(
-            `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}/values/D2:2`,
+        const sheetDates = await fetch(
+            `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}/values/${sheetName}!D2:2`,
             {
                 headers: {
                     "Content-Type": "application/json",
@@ -45,11 +61,56 @@ const App = () => {
                 },
             }
         );
-
-        nextMeetingDay = (await dates.json())["values"][0].length;
-
+        const dates = (await sheetDates.json())["values"][0]; 
+        const dateToday = new Date(); 
+        // 
+        if(dates[dates.length-1] === dateToday.toLocaleDateString('en-us',{month:'short' , day:'numeric'}).split(" ").join(". ")){
+            nextMeetingDay = dates.length;
+        }
+        else {
+            console.log("Cannot find Current Date in Google Sheets\nAdding a new Column!");
+            fetch(
+                `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}:batchUpdate`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        //update this token with yours.
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+    
+                    body: JSON.stringify({
+                        "requests": [
+                          {
+                            "updateCells": { 
+                                "range": {
+                                    "sheetId": sheetID,
+                                    "startColumnIndex": meetingDatesStartIndex + dates.length ,
+                                    "endColumnIndex": meetingDatesStartIndex + dates.length + 1,
+                                    "endRowIndex": 2,
+                                    "startRowIndex": 1 
+                                },
+                                "fields": "*",
+                                "rows": [
+                                    {
+                                    "values": [{
+                                        "userEnteredValue":{
+                                        "stringValue": dateToday.toLocaleDateString('en-us',{month:'short' , day:'numeric'}).split(" ").join(". ") }}
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }),
+                }
+            );
+            nextMeetingDay = dates.length + 1;
+        }
+        
+        
         const request = await fetch(
-            `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}/values/A1:B194`,
+            `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}/values/${sheetName}!A${sections[section][0]}:B${sections[section][1]}`,
             {
                 headers: {
                     "Content-Type": "application/json",
@@ -63,7 +124,7 @@ const App = () => {
         // Finding and getting the position of the Student's name
         for (var i in data["values"]) {
             if (data["values"][i][1] === name) {
-                nameIndex = parseInt(i) + 1;
+                nameIndex = parseInt(i) +  sections[section][0];
                 console.log("Located at Column 1, Row " + nameIndex);
 
                 fetch(
@@ -93,6 +154,7 @@ const App = () => {
                                             },
                                         ],
                                         range: {
+                                            sheetId: sheetID,
                                             // Change Meeting Day
                                             startColumnIndex: meetingDatesStartIndex + (nextMeetingDay - 1),
                                             endColumnIndex: meetingDatesStartIndex + nextMeetingDay,
@@ -140,7 +202,7 @@ const App = () => {
                     if (text !== lastResult) {
                         lastResult = text;
 
-                        updateAttendance(parsed.name);
+                        updateAttendance(parsed.name, parsed.section);
                     }
                 },
                 (errorMessage) => {

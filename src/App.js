@@ -6,8 +6,7 @@ import "onsenui/css/onsenui.css";
 import "onsenui/css/onsen-css-components.css";
 
 const spreadsheetID = "1BEdgdwItam2jOA9MGEhtexD3MqK21Y0mMxxBebvooO4";
-// The access token changes every few minutes
-const accessToken = "TOKEN";
+const accessToken = "ya29.a0AeTM1ifjH6ceJAY6a4QWkU5lM2_B3w8FsjPTZO2Thzkv3p2rKjMfQoNoAp4Peo003DAIAL4FHch2ZLXH26ATy8mwgTn2IEaZG5ee2h5t7H4chcivmoUyFmLtGQszwzChN18YVGxBcgU1BaK_k28DLl1iC4K-aCgYKAf0SARMSFQHWtWOmH-ZwkLkNMEr8IZYWWyxlgA0163";
 
 // Our main component
 const App = () => {
@@ -34,7 +33,20 @@ const App = () => {
     let updateAttendance = async (name) => {
         // Name Index: Position of the Student's name in the Google Sheet
         var nameIndex = 1;
-        const meetingDay = 3;
+        const meetingDatesStartIndex = 3;
+        let nextMeetingDay;
+
+        const dates = await fetch(
+            `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}/values/D2:2`,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
+
+        nextMeetingDay = (await dates.json())["values"][0].length;
 
         const request = await fetch(
             `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}/values/A1:B194`,
@@ -45,6 +57,7 @@ const App = () => {
                 },
             }
         );
+
         const data = await request.json();
 
         // Finding and getting the position of the Student's name
@@ -81,8 +94,8 @@ const App = () => {
                                         ],
                                         range: {
                                             // Change Meeting Day
-                                            startColumnIndex: meetingDay + 2,
-                                            endColumnIndex: meetingDay + 3,
+                                            startColumnIndex: meetingDatesStartIndex + (nextMeetingDay - 1),
+                                            endColumnIndex: meetingDatesStartIndex + nextMeetingDay,
                                             endRowIndex: nameIndex,
                                             startRowIndex: nameIndex - 1,
                                         },

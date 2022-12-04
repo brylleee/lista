@@ -1,5 +1,5 @@
 {
-  "main.css": "./static/css/main.5d492ff8.chunk.css",
+  "main.css": "./static/css/main.b3f8d82b.chunk.css",
   "main.js": "./static/js/main.1528ae6f.chunk.js",
   "main.js.map": "./static/js/main.1528ae6f.chunk.js.map",
   "runtime~main.js": "./static/js/runtime~main.d653cc00.js",
@@ -8,10 +8,10 @@
   "static/js/2.060da297.chunk.js": "./static/js/2.060da297.chunk.js",
   "static/js/2.060da297.chunk.js.map": "./static/js/2.060da297.chunk.js.map",
   "index.html": "./index.html",
-  "precache-manifest.954b9bb9a7e8f7ad11c748b13ddf5a21.js": "./precache-manifest.954b9bb9a7e8f7ad11c748b13ddf5a21.js",
+  "precache-manifest.c9180bd4be6dd7e148f335737f892f76.js": "./precache-manifest.c9180bd4be6dd7e148f335737f892f76.js",
   "service-worker.js": "./service-worker.js",
   "static/css/2.5357d579.chunk.css.map": "./static/css/2.5357d579.chunk.css.map",
-  "static/css/main.5d492ff8.chunk.css.map": "./static/css/main.5d492ff8.chunk.css.map",
+  "static/css/main.b3f8d82b.chunk.css.map": "./static/css/main.b3f8d82b.chunk.css.map",
   "static/media/index.css": "./static/media/Kollektif.4d49be6e.ttf",
   "static/media/onsenui.css": "./static/media/ionicons.cfdc1522.ttf"
 }

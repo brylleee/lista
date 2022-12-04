@@ -6,9 +6,9 @@ import "onsenui/css/onsenui.css";
 import "onsenui/css/onsen-css-components.css";
 
 const spreadsheetID = "1BEdgdwItam2jOA9MGEhtexD3MqK21Y0mMxxBebvooO4";
-const sheetName = "ListaAttendance" // SHEET NAME; 
-const sheetID = 0 // SHEET ID
-const accessToken = "ya29.a0AeTM1icE-aqqd5b4IJuBugBhQaE-mYP8R5MWt_5pRc3k8pt1cXkMXUqpHYYczFVbTJsbgApkwkN-QmWf3KmAFNYgFFy8D8nHKLBN27eR9WrFn6A1Qp29JqV5qqY0SFDeWKzhvSfxjVcwVh7LPSzcVGsuq1yLaCgYKAV4SARISFQHWtWOmZNLI9LERKAUgA50rJsDJSQ0163";
+const sheetName = "ListaAttendance"  // SHEET NAME
+const sheetID = 0  // SHEET ID
+const accessToken = "";
 
 // Our main component
 const App = () => {
@@ -17,10 +17,12 @@ const App = () => {
     let [studentNumber, setStudentNumber] = useState("");
     let [guild, setGuild] = useState("");
     let [section, setSection] = useState("");
+
     let [sideMenuOpen, setSideMenuOpen] = useState(false);
+
     // Separate name, guild, and section and return it as different variables
     let parseResult = (qrcodeContent) => {
-        let splitted = qrcodeContent.split(" [|] "); // QR Code content example: Dela Cruz, Juan A. [|] Student No. [|] IREDOC [|] STEM1201
+        let splitted = qrcodeContent.split(" [|] ");  // QR Code content example: Dela Cruz, Juan A. [|] Student No. [|] IREDOC [|] STEM1201
         return {
             name: splitted[0],
             studentNumber: splitted[1],
@@ -28,6 +30,7 @@ const App = () => {
             section: splitted[3],
         };
     };
+
     const sections = {
         "ABM1101": [4, 7],
         "CA1101": [9, 22],
@@ -44,7 +47,7 @@ const App = () => {
         "ITM1201": [136, 160],
         "STEM1201": [162, 178],
         "STEM1202": [180, 195],
-      }
+    };
 
     let updateAttendance = async (name, section) => {
         // Name Index: Position of the Student's name in the Google Sheet
@@ -61,14 +64,17 @@ const App = () => {
                 },
             }
         );
-        const dates = (await sheetDates.json())["values"][0]; 
-        const dateToday = new Date(); 
-        // 
-        if(dates[dates.length-1] === dateToday.toLocaleDateString('en-us',{month:'short' , day:'numeric'}).split(" ").join(". ")){
+
+        const dates = (await sheetDates.json())["values"][0];
+        const dateToday = new Date();
+
+        // Check if today is already added in the meeting dates row
+        if(dates[dates.length-1] === dateToday.toLocaleDateString('en-us',
+                                                    { month: 'short' , day: 'numeric' }).split(" ").join(". ")) {
             nextMeetingDay = dates.length;
-        }
-        else {
+        } else {
             console.log("Cannot find Current Date in Google Sheets\nAdding a new Column!");
+
             fetch(
                 `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}:batchUpdate`,
                 {
@@ -78,37 +84,33 @@ const App = () => {
                         //update this token with yours.
                         Authorization: `Bearer ${accessToken}`,
                     },
-    
                     body: JSON.stringify({
-                        "requests": [
-                          {
-                            "updateCells": { 
+                        "requests": [{
+                            "updateCells": {
                                 "range": {
                                     "sheetId": sheetID,
                                     "startColumnIndex": meetingDatesStartIndex + dates.length ,
                                     "endColumnIndex": meetingDatesStartIndex + dates.length + 1,
                                     "endRowIndex": 2,
-                                    "startRowIndex": 1 
+                                    "startRowIndex": 1
                                 },
                                 "fields": "*",
-                                "rows": [
-                                    {
+                                "rows": [{
                                     "values": [{
                                         "userEnteredValue":{
-                                        "stringValue": dateToday.toLocaleDateString('en-us',{month:'short' , day:'numeric'}).split(" ").join(". ") }}
-                                            ]
+                                            "stringValue": dateToday.toLocaleDateString('en-us', { month: 'short' , day: 'numeric' }).split(" ").join(". ")
                                         }
-                                    ]
-                                }
+                                    }]
+                                }]
                             }
-                        ]
+                        }]
                     }),
                 }
             );
+
             nextMeetingDay = dates.length + 1;
         }
-        
-        
+
         const request = await fetch(
             `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}/values/${sheetName}!A${sections[section][0]}:B${sections[section][1]}`,
             {
@@ -133,7 +135,6 @@ const App = () => {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
-                            //update this token with yours.
                             Authorization: `Bearer ${accessToken}`,
                         },
 
@@ -176,6 +177,7 @@ const App = () => {
         console.log(data);
         return data;
     };
+
     // Variable to compare the last result to the recent QR code
     let lastResult = "";
 

@@ -213,7 +213,7 @@ const App = () => {
 
     // useEffect() means if this component is rendered (shown to the user)
     useEffect(() => {
-        const html5QrCode = new Html5Qrcode("reader"); // Use the div with id 'reader' as our QR Code Reader
+        const html5QrCode = new Html5Qrcode("reader", { formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE ] }); // Use the div with id 'reader' as our QR Code Reader
         const config = { fps: 10, qrbox: 200 }; //  QR Code Reader configurations
 
         // Start reader using back camera

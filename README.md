@@ -1,5 +1,5 @@
 # LISTA 
-Attendance tracking application for **LISTO** and **GILAS**.  Exclusive use for **STI Sta. Maria**.
+Attendance tracking application for **LISTO** and **GILAS**.
 
 This **README** is meant for the developers.
 

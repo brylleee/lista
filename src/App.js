@@ -5,8 +5,10 @@ import * as Ons from "react-onsenui";
 import "onsenui/css/onsenui.css";
 import "onsenui/css/onsen-css-components.css";
 
-const spreadsheetID = "1BEdgdwItam2jOA9MGEhtexD3MqK21Y0mMxxBebvooO4";
-const sheetName = "ListaAttendance"  // SHEET NAME
+import aes from 'crypto-js/aes';
+
+const spreadsheetID = "1SI1vuW0HQUveqiKPT1Jjr_A471W02Co0OXVcp2zyeO0";
+let sheetName = ""  // SHEET NAME
 const sheetID = 0  // SHEET ID
 const accessToken = "";
 
@@ -31,29 +33,57 @@ const App = () => {
         };
     };
 
-    const sections = {
-        "ABM1101": [4, 7],
-        "CA1101": [9, 22],
-        "DA1101": [9, 22],
-        "HUMSS1101": [24, 29],
-        "TO1101": [24, 29],
-        "ITM1101": [31, 54],
-        "STEM1101": [56, 81],
-        "STEM1102": [83, 92],
-        "ABM1201": [95, 113],
-        "CA1201": [115, 121],
-        "DA1201": [115, 121],
-        "HUMSS1201": [123, 134],
-        "ITM1201": [136, 160],
-        "STEM1201": [162, 178],
-        "STEM1202": [180, 195],
-    };
+    const LISTOGuilds = [ "IREDOC", "SWES", "ETIKA", "NUMERIKA", "LETRA" ];
+    const GILASGuilds = [ "AWIT", "GALAW", "INSTRUMENTO", "LITERATURA", "SINING (MULTIMEDIA)", "SINING (VISUAL ARTS)" ];
 
-    let updateAttendance = async (name, section) => {
+    let sections;
+
+    let updateAttendance = async (name, section, guild) => {
         // Name Index: Position of the Student's name in the Google Sheet
         var nameIndex = 1;
         const meetingDatesStartIndex = 3;
         let nextMeetingDay;
+
+        if(LISTOGuilds.includes(guild)) {
+            sheetName = "LISTA_SectionBased_Attendace";
+            sections = {
+                "ABM1101": [4, 7],
+                "CA1101": [9, 22],
+                "DA1101": [9, 22],
+                "HUMSS1101": [24, 29],
+                "TO1101": [24, 29],
+                "ITM1101": [31, 54],
+                "STEM1101": [56, 81],
+                "STEM1102": [83, 92],
+                "ABM1201": [95, 113],
+                "CA1201": [115, 121],
+                "DA1201": [115, 121],
+                "HUMSS1201": [123, 134],
+                "ITM1201": [136, 160],
+                "STEM1201": [162, 178],
+                "STEM1202": [180, 195],
+            };
+        } else if(GILASGuilds.includes(guild)) {
+            sheetName = "LISTA_SectionBased_GILAS_Attendance";
+            sections = {
+                "STEM1101": [4, 11],
+                "STEM1102": [13, 41],
+                "ABM1101": [43, 52],
+                "HUMSS1101": [54, 68],
+                "ITM1101": [70, 83],
+                "TO1101": [85, 95],
+                "CA1101": [97, 100],
+                "DA1101": [102, 106],
+                "STEM1201": [108, 123],
+                "STEM1202": [125, 133],
+                "ABM1201": [135, 148],
+                "HUMSS1201": [150, 160],
+                "TO1201": [162, 183],
+                "ITM1201": [185, 194],
+                "CA1201": [196, 202],
+                "DA1201": [204, 210],
+            };
+        }
 
         const sheetDates = await fetch(
             `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}/values/${sheetName}!D2:2`,
@@ -193,7 +223,10 @@ const App = () => {
                 config,
                 (text, result) => {
                     // Parse QR Code content and update our states
-                    let parsed = parseResult(text);
+                    let parsed = parseResult(aes.decrypt(text, "@stamaria.sti.edu.ph").toString()  // Raw result to hex
+                                    .match(/.{1,2}/g).map(function(v) {                // Hex to string
+                                        return String.fromCharCode(parseInt(v, 16));
+                                    }).join(''))
 
                     setName(parsed.name);
                     setStudentNumber(parsed.studentNumber);
@@ -204,7 +237,7 @@ const App = () => {
                     if (text !== lastResult) {
                         lastResult = text;
 
-                        updateAttendance(parsed.name, parsed.section);
+                        // updateAttendance(parsed.name, parsed.section, parsed.guild);
                     }
                 },
                 (errorMessage) => {

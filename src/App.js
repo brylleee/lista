@@ -21,6 +21,7 @@ const App = () => {
     let [section, setSection] = useState("");
 
     let [sideMenuOpen, setSideMenuOpen] = useState(false);
+    let [hasScanned, setHasScanned] = useState(false);
 
     // Separate name, guild, and section and return it as different variables
     let parseResult = (qrcodeContent) => {
@@ -219,15 +220,12 @@ const App = () => {
         return data;
     };
 
-    // Variable to compare the last result to the recent QR code
-    let lastResult = "";
-
     // useEffect() means if this component is rendered (shown to the user)
     useEffect(() => {
         const html5QrCode = new Html5Qrcode("reader", {
             formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE ]
         }); // Use the div with id 'reader' as our QR Code Reader
-        const config = { fps: 10, qrbox: 200 }; //  QR Code Reader configurations
+        const config = { fps: 5, qrbox: 200 }; //  QR Code Reader configurations
 
         // Start reader using back camera
         html5QrCode
@@ -246,12 +244,7 @@ const App = () => {
                     setGuild(parsed.guild);
                     setSection(parsed.section);
 
-                    //This conditions stops the application from updating the spreadsheet when showing the same QR code
-                    if (text !== lastResult) {
-                        lastResult = text;
-
-                        updateAttendance(parsed.name, parsed.section, parsed.guild);
-                    }
+                    setHasScanned(true);
                 },
                 (errorMessage) => {
                     // If scan has error, this block will execute
@@ -263,6 +256,17 @@ const App = () => {
                 console.log(err);
             });
     }, []);
+
+    let confirmAttendance = () => {
+        updateAttendance(name, section, guild);
+
+        setHasScanned(false);
+
+        setName("");
+        setStudentNumber("");
+        setGuild("");
+        setSection("");
+    }
 
     let renderToolbar = () => {
         return (
@@ -292,7 +296,16 @@ const App = () => {
                     isOpen={ sideMenuOpen }
                     onPostClose={ () => setSideMenuOpen(false) }>
 
-                    <Ons.Page> Page Left </Ons.Page>
+                    <Ons.Page>
+                        <div id="logo" align="center" >
+                            <img src={ require("./assets/iredoc-logo.png") } style={{ height: "300px" }} alt="iredoclogo" />
+                        </div>
+
+                        <hr />
+
+                        <p align="center">STI LISTO Club All Rights Reserved</p>
+                        <p align="center">PBP Group | IREDOC Guild</p>
+                    </Ons.Page>
                 </Ons.SplitterSide>
 
                 <Ons.SplitterContent>
@@ -316,6 +329,12 @@ const App = () => {
                                 <p id="guild">Guild: {guild}</p>
                                 <p id="section">Section: {section}</p>
                             </Ons.Card>
+                        </div>
+
+                        <div id="buttons">
+                            <Ons.Button modifier="large--cta" onClick={ confirmAttendance } disabled={ !hasScanned }>
+                                CONFIRM
+                            </Ons.Button>
                         </div>
                     </Ons.Page>
                 </Ons.SplitterContent>

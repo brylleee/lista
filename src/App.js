@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Html5Qrcode } from "html5-qrcode";
+import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 
 import * as Ons from "react-onsenui";
 import "onsenui/css/onsenui.css";
@@ -9,8 +9,8 @@ import aes from 'crypto-js/aes';
 
 const spreadsheetID = "1SI1vuW0HQUveqiKPT1Jjr_A471W02Co0OXVcp2zyeO0";
 let sheetName = ""  // SHEET NAME
-const sheetID = 0  // SHEET ID
-const accessToken = "";
+let sheetID = 0;  // SHEET ID
+const accessToken = "ya29.a0AeTM1idnGvjPgro3QvGFTg8_yFPfezPwzn5xNUQa2Ri8Q41jyEFHffOzdSDXp-e1NoCUfVNB2yA0EtbVHlYr5jTtFJEm8sI9653WUSJjJR8rwkWZ1piUNTuGeqA0EeiwWGgy-CNKA1eVfEoTGzCXTq1iLhkFaCgYKAfsSARMSFQHWtWOmj4hmmdaaiTw5y4hSoeYHFA0163";
 
 // Our main component
 const App = () => {
@@ -38,14 +38,16 @@ const App = () => {
 
     let sections;
 
-    let updateAttendance = async (name, section, guild) => {
+    let updateAttendance = async (attName, section, guild) => {
         // Name Index: Position of the Student's name in the Google Sheet
         var nameIndex = 1;
         const meetingDatesStartIndex = 3;
         let nextMeetingDay;
 
+        attName = attName.replace(/\s\w{1,2}\.$/, "");  // Strip middle name
+
         if(LISTOGuilds.includes(guild)) {
-            sheetName = "LISTA_SectionBased_Attendace";
+            sheetName = "LISTA_SectionBased_Attendance";
             sections = {
                 "ABM1101": [4, 7],
                 "CA1101": [9, 22],
@@ -63,6 +65,7 @@ const App = () => {
                 "STEM1201": [162, 178],
                 "STEM1202": [180, 195],
             };
+            sheetID = 1382711057;
         } else if(GILASGuilds.includes(guild)) {
             sheetName = "LISTA_SectionBased_GILAS_Attendance";
             sections = {
@@ -83,6 +86,7 @@ const App = () => {
                 "CA1201": [196, 202],
                 "DA1201": [204, 210],
             };
+            sheetID = 634796021;
         }
 
         const sheetDates = await fetch(
@@ -95,7 +99,14 @@ const App = () => {
             }
         );
 
-        const dates = (await sheetDates.json())["values"][0];
+        let dates;
+
+        try {
+            dates = (await sheetDates.json())["values"][0];
+        } catch(e) {
+            dates = [];
+        }
+
         const dateToday = new Date();
 
         // Check if today is already added in the meeting dates row
@@ -155,7 +166,7 @@ const App = () => {
 
         // Finding and getting the position of the Student's name
         for (var i in data["values"]) {
-            if (data["values"][i][1] === name) {
+            if (data["values"][i][1] === attName) {
                 nameIndex = parseInt(i) +  sections[section][0];
                 console.log("Located at Column 1, Row " + nameIndex);
 
@@ -178,7 +189,7 @@ const App = () => {
                                                     {
                                                         userEnteredValue: {
                                                             stringValue:
-                                                                "ATTENDED",
+                                                                "P",
                                                         },
                                                     },
                                                 ],
@@ -213,7 +224,9 @@ const App = () => {
 
     // useEffect() means if this component is rendered (shown to the user)
     useEffect(() => {
-        const html5QrCode = new Html5Qrcode("reader"); // Use the div with id 'reader' as our QR Code Reader
+        const html5QrCode = new Html5Qrcode("reader", {
+            formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE ]
+        }); // Use the div with id 'reader' as our QR Code Reader
         const config = { fps: 10, qrbox: 200 }; //  QR Code Reader configurations
 
         // Start reader using back camera
@@ -237,7 +250,7 @@ const App = () => {
                     if (text !== lastResult) {
                         lastResult = text;
 
-                        // updateAttendance(parsed.name, parsed.section, parsed.guild);
+                        updateAttendance(parsed.name, parsed.section, parsed.guild);
                     }
                 },
                 (errorMessage) => {

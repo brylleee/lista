@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
-
+import {gapi} from "gapi-script"
 import * as Ons from "react-onsenui";
 import "onsenui/css/onsenui.css";
 import "onsenui/css/onsen-css-components.css";
@@ -10,10 +10,12 @@ import aes from 'crypto-js/aes';
 const spreadsheetID = "1SI1vuW0HQUveqiKPT1Jjr_A471W02Co0OXVcp2zyeO0";
 let sheetName = ""  // SHEET NAME
 let sheetID = 0;  // SHEET ID
-const accessToken = "ya29.a0AeTM1idnGvjPgro3QvGFTg8_yFPfezPwzn5xNUQa2Ri8Q41jyEFHffOzdSDXp-e1NoCUfVNB2yA0EtbVHlYr5jTtFJEm8sI9653WUSJjJR8rwkWZ1piUNTuGeqA0EeiwWGgy-CNKA1eVfEoTGzCXTq1iLhkFaCgYKAfsSARMSFQHWtWOmj4hmmdaaiTw5y4hSoeYHFA0163";
-
+const CLIENT_ID ="393048546212-rbmdqi89tvb3kp71vpjhdin250f9294t.apps.googleusercontent.com"
+const API_KEY="AIzaSyCiGSF38_pEuSO1wVM9T8BQS4yFlvzZQW0"
+const SCOPES="https://www.googleapis.com/auth/spreadsheets"
 // Our main component
 const App = () => {
+
     // Name, guild, and section states that updates everytime QR Code is scanned
     let [name, setName] = useState("");
     let [studentNumber, setStudentNumber] = useState("");
@@ -38,7 +40,18 @@ const App = () => {
 
     let sections;
 
+    useEffect(() =>{
+        function start(){ 
+            gapi.client.init({
+                apiKey: API_KEY, 
+                clientId: CLIENT_ID, 
+                scope: SCOPES
+            })
+        };
+        gapi.load('client:auth2', start)
+    })
     let updateAttendance = async (attName, section, guild) => {
+        var accessToken = gapi.auth.getToken().access_token;
         // Name Index: Position of the Student's name in the Google Sheet
         var nameIndex = 1;
         const meetingDatesStartIndex = 3;
@@ -271,9 +284,12 @@ const App = () => {
                     <div className="sidebyside">
                         <Ons.ToolbarButton style={{ color: "white" }} onClick={ () => setSideMenuOpen(true) }>
                             <Ons.Icon icon="md-menu"></Ons.Icon>
+
+
                         </Ons.ToolbarButton>
 
                         <span id="toolbar-title">Lista</span>
+
                     </div>
                 </div>
             </Ons.Toolbar>

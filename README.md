@@ -29,6 +29,9 @@ This **README** is meant for the developers.
 
  - **HTML5QRCODE**
 	This is a free library we will be using in order to detect QR Code. Same as React, just type in `npm install html5-qrcode`
+	
+ - **Gapi**
+	This is Google's client library for browser-side JavaScript to easily connect with Google APIs. . To install simply type in `npm install gapi-script`
 
 ***Note:** that you no longer need to install **Cordova**, you can run your code by typing* `npm run start` *(after saving your changes to your code, it automatically recompiles it so you do not need to re-run it)*. ***Cordova** installation is difficult, but if you still wish to install it, you can through [here](https://cordova.apache.org/docs/en/11.x/guide/cli/), you should then install the required softwares for **Cordova** android development through [here](https://cordova.apache.org/docs/en/11.x/guide/platforms/android/index.html).*
 

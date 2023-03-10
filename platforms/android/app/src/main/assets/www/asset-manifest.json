@@ -1,17 +1,18 @@
 {
-  "main.css": "./static/css/main.b3f8d82b.chunk.css",
-  "main.js": "./static/js/main.0fd47ab7.chunk.js",
-  "main.js.map": "./static/js/main.0fd47ab7.chunk.js.map",
+  "main.css": "./static/css/main.84d3a7c9.chunk.css",
+  "main.js": "./static/js/main.e486077a.chunk.js",
+  "main.js.map": "./static/js/main.e486077a.chunk.js.map",
   "runtime~main.js": "./static/js/runtime~main.d653cc00.js",
   "runtime~main.js.map": "./static/js/runtime~main.d653cc00.js.map",
   "static/css/2.5357d579.chunk.css": "./static/css/2.5357d579.chunk.css",
-  "static/js/2.11933769.chunk.js": "./static/js/2.11933769.chunk.js",
-  "static/js/2.11933769.chunk.js.map": "./static/js/2.11933769.chunk.js.map",
+  "static/js/2.b942581a.chunk.js": "./static/js/2.b942581a.chunk.js",
+  "static/js/2.b942581a.chunk.js.map": "./static/js/2.b942581a.chunk.js.map",
   "index.html": "./index.html",
-  "precache-manifest.2c219b281a8c1aa72bc18f777ba98bf0.js": "./precache-manifest.2c219b281a8c1aa72bc18f777ba98bf0.js",
+  "precache-manifest.057fbd8cdc799f8b02718219be518172.js": "./precache-manifest.057fbd8cdc799f8b02718219be518172.js",
   "service-worker.js": "./service-worker.js",
   "static/css/2.5357d579.chunk.css.map": "./static/css/2.5357d579.chunk.css.map",
-  "static/css/main.b3f8d82b.chunk.css.map": "./static/css/main.b3f8d82b.chunk.css.map",
+  "static/css/main.84d3a7c9.chunk.css.map": "./static/css/main.84d3a7c9.chunk.css.map",
   "static/media/index.css": "./static/media/Kollektif.4d49be6e.ttf",
-  "static/media/onsenui.css": "./static/media/ionicons.cfdc1522.ttf"
+  "static/media/onsenui.css": "./static/media/ionicons.cfdc1522.ttf",
+  "static/media/iredoc-logo.png": "./static/media/iredoc-logo.ce6965c1.png"
 }
